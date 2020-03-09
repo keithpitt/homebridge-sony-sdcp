@@ -24,7 +24,7 @@ function SonyProjectorCharacteristics(Characteristic) {
    this.ScreenAspectRatio.SQUEEZE = 5;
 
    this.ScreenPicturePosition = function() {
-      Characteristic.call(this, 'Screen Picture Position', '54B101E6-A017-474F-9D39-42DD8E34165F');
+      Characteristic.call(this, 'Screen Picture Position', 'c3c18dc0-ba40-4e94-a4f1-61a9497e617c');
       this.setProps({
          format: Characteristic.Formats.UINT8,
          maxValue: 4,
