@@ -18,22 +18,29 @@ function ProjectorAccessory(log, config) {
     this.config = config;
     this.name = config["name"];
     this.lastState = 0;
-    this.ratio = SonyProjectorCharacteristics.ScreenAspectRatio.NORMAL; 
+    this.ratio = SonyProjectorCharacteristics.ScreenAspectRatio.NORMAL;
+    this.picturePosition = SonyProjectorCharacteristics.ScreenPicturePosition.PRESET_1_85;
     this.myClient = SdcpClient.SdcpClient({address: this.config["host"], port: PORT});
-    
+
     this.switchService = new Service.Switch(this.name);
     this.switchService
         .getCharacteristic(Characteristic.On)
         .on('get', this.getCurrentState.bind(this))
         .on('set', this.setCurrentState.bind(this));
-    
+
     this.switchService.addCharacteristic(SonyProjectorCharacteristics.ScreenAspectRatio)
     this.switchService
         .getCharacteristic(SonyProjectorCharacteristics.ScreenAspectRatio)
         .on('get', this.getAspectRatio.bind(this))
         .on('set', this.setAspectRatio.bind(this));
 
-   
+    this.switchService.addCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
+    this.switchService
+        .getCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
+        .on('get', this.getPicturePosition.bind(this))
+        .on('set', this.setPicturePosition.bind(this));
+
+
    // TODO: plumb this into ADCP, or refactor the whole thing to support SDAP
     this.informationService = new Service.AccessoryInformation();
     this.informationService
@@ -95,6 +102,14 @@ ProjectorAccessory.prototype.setAspectRatio = function (ratio, callback) {
        callback(null);
 }
 
+
+ProjectorAccessory.prototype.getPicturePosition = function (callback) {
+    this.log("Requested Picture Position, before request it is %s", this.picturePosition);
+}
+
+ProjectorAccessory.prototype.setPicturePosition = function (picturePosition, callback) {
+    this.log("Requested Picture Position change from %s to %s", this.picturePosition, picturePosition);
+}
 
 ProjectorAccessory.prototype.getCurrentState = function (callback) {
     this.log("Requested CurrentState: %s", this.lastState);
