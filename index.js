@@ -17,7 +17,7 @@ function ProjectorAccessory(log, config) {
     this.name = config["name"];
     this.lastState = 0;
     this.ratio = SonyProjectorCharacteristics.ScreenAspectRatio.NORMAL;
-    this.picturePosition = SonyProjectorCharacteristics.ScreenPicturePosition.PRESET_1_85;
+    this.pictureMode = Characteristic.PictureMode.OTHER;
     this.myClient = SdcpClient.SdcpClient({address: this.config["host"], port: PORT});
 
     this.tvService = new Service.Television(this.name);
@@ -37,11 +37,17 @@ function ProjectorAccessory(log, config) {
         .on('get', this.getAspectRatio.bind(this))
         .on('set', this.setAspectRatio.bind(this));
 
-    this.tvService.addCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
+    // this.tvService.addCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
+    // this.tvService
+    //     .getCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
+    //     .on('get', this.getPicturePosition.bind(this))
+    //     .on('set', this.setPicturePosition.bind(this));
+
+    this.tvService.addCharacteristic(Characteristic.PictureMode);
     this.tvService
         .getCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
-        .on('get', this.getPicturePosition.bind(this))
-        .on('set', this.setPicturePosition.bind(this));
+        .on('get', this.getPictureMode.bind(this))
+        .on('set', this.setPictureMode.bind(this));
 
     this.informationService = new Service.AccessoryInformation();
     this.informationService
@@ -104,12 +110,13 @@ ProjectorAccessory.prototype.setAspectRatio = function (ratio, callback) {
 }
 
 
-ProjectorAccessory.prototype.getPicturePosition = function (callback) {
-    this.log("Requested Picture Position, before request it is %s", this.picturePosition);
+ProjectorAccessory.prototype.getPictureMode = function (callback) {
+    this.log("Requested Picture Position, before request it is %s", this.pictureMode);
+    callback(null,Characteristic.PictureMode.CALIBRATED_DARK);
 }
 
-ProjectorAccessory.prototype.setPicturePosition = function (picturePosition, callback) {
-    this.log("Requested Picture Position change from %s to %s", this.picturePosition, picturePosition);
+ProjectorAccessory.prototype.setPictureMode = function (pictureMode, callback) {
+    this.log("Requested Picture Mode change from %s to %s", this.pictureMode, pictureMode);
 }
 
 ProjectorAccessory.prototype.getCurrentState = function (callback) {
