@@ -45,7 +45,7 @@ function ProjectorAccessory(log, config) {
 
     this.tvService.addCharacteristic(Characteristic.PictureMode);
     this.tvService
-        .getCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
+        .getCharacteristic(Characteristic.PictureMode)
         .on('get', this.getPictureMode.bind(this))
         .on('set', this.setPictureMode.bind(this));
 
