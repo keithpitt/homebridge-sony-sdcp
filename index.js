@@ -4,8 +4,6 @@ var SonyProjectorCharacteristics;
 
 PORT = 53484;
 
-
-
 module.exports = function(homebridge) {
     Service = homebridge.hap.Service;
     Characteristic = homebridge.hap.Characteristic;
@@ -22,20 +20,20 @@ function ProjectorAccessory(log, config) {
     this.picturePosition = SonyProjectorCharacteristics.ScreenPicturePosition.PRESET_1_85;
     this.myClient = SdcpClient.SdcpClient({address: this.config["host"], port: PORT});
 
-    this.switchService = new Service.Switch(this.name);
-    this.switchService
-        .getCharacteristic(Characteristic.On)
+    this.tvService = new Service.Television(this.name);
+    this.tvService
+        .getCharacteristic(Characteristic.Active)
         .on('get', this.getCurrentState.bind(this))
         .on('set', this.setCurrentState.bind(this));
 
-    this.switchService.addCharacteristic(SonyProjectorCharacteristics.ScreenAspectRatio)
-    this.switchService
+    this.tvService.addCharacteristic(SonyProjectorCharacteristics.ScreenAspectRatio)
+    this.tvService
         .getCharacteristic(SonyProjectorCharacteristics.ScreenAspectRatio)
         .on('get', this.getAspectRatio.bind(this))
         .on('set', this.setAspectRatio.bind(this));
 
-    this.switchService.addCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
-    this.switchService
+    this.tvService.addCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
+    this.tvService
         .getCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
         .on('get', this.getPicturePosition.bind(this))
         .on('set', this.setPicturePosition.bind(this));
@@ -50,9 +48,8 @@ function ProjectorAccessory(log, config) {
 
 }
 
-
 ProjectorAccessory.prototype.getServices = function() {
-    return [this.informationService, this.switchService];
+    return [this.informationService, this.tvService];
 };
 
 ProjectorAccessory.prototype.getAspectRatio = function (callback) {
