@@ -26,6 +26,11 @@ function ProjectorAccessory(log, config) {
         .on('get', this.getCurrentState.bind(this))
         .on('set', this.setCurrentState.bind(this));
 
+    this.tvService.setCharacteristic(Characteristic.ConfiguredName, this.name)
+    this.tvService.getCharacteristic(Characteristic.ConfiguredName).setProps({
+      perms: [Characteristic.Perms.READ]
+    });
+
     this.tvService.addCharacteristic(SonyProjectorCharacteristics.ScreenAspectRatio)
     this.tvService
         .getCharacteristic(SonyProjectorCharacteristics.ScreenAspectRatio)
