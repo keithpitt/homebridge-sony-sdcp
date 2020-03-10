@@ -40,11 +40,11 @@ function ProjectorAccessory(log, config) {
 
     this.informationService = new Service.AccessoryInformation();
     this.informationService
-       .setCharacteristic(Characteristic.Name, "Sony")
+       .setCharacteristic(Characteristic.Name, this.name)
        .setCharacteristic(Characteristic.Manufacturer, "Sony")
-       .setCharacteristic(Characteristic.Model, "Projector")
-       .setCharacteristic(Characteristic.SerialNumber, "123456")
-       .setCharacteristic(Characteristic.FirmwareRevision, version);
+       .setCharacteristic(Characteristic.Model, "Unknown")
+       .setCharacteristic(Characteristic.SerialNumber, "Unknown")
+       .setCharacteristic(Characteristic.FirmwareRevision, "Unknown");
 }
 
 ProjectorAccessory.prototype.getServices = function() {
