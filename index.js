@@ -38,18 +38,17 @@ function ProjectorAccessory(log, config) {
         .on('get', this.getPicturePosition.bind(this))
         .on('set', this.setPicturePosition.bind(this));
 
-
-   // TODO: plumb this into ADCP, or refactor the whole thing to support SDAP
     this.informationService = new Service.AccessoryInformation();
     this.informationService
+       .setCharacteristic(Characteristic.Name, "Sony")
        .setCharacteristic(Characteristic.Manufacturer, "Sony")
        .setCharacteristic(Characteristic.Model, "Projector")
-       .setCharacteristic(Characteristic.SerialNumber, "123456");
-
+       .setCharacteristic(Characteristic.SerialNumber, "123456")
+       .setCharacteristic(Characteristic.FirmwareRevision, version);
 }
 
 ProjectorAccessory.prototype.getServices = function() {
-    return [this.informationService, this.tvService];
+    return [ this.informationService, this.tvService ];
 };
 
 ProjectorAccessory.prototype.getAspectRatio = function (callback) {
