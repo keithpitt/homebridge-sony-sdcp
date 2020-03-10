@@ -20,31 +20,31 @@ function ProjectorAccessory(log, config) {
     this.pictureMode = Characteristic.PictureMode.OTHER;
     this.myClient = SdcpClient.SdcpClient({address: this.config["host"], port: PORT});
 
-    this.tvService = new Service.Television(this.name);
-    this.tvService
-        .getCharacteristic(Characteristic.Active)
+    this.switchService = new Service.Switch(this.name);
+    this.switchService
+        .getCharacteristic(Characteristic.On)
         .on('get', this.getCurrentState.bind(this))
         .on('set', this.setCurrentState.bind(this));
 
-    this.tvService.setCharacteristic(Characteristic.ConfiguredName, this.name)
-    this.tvService.getCharacteristic(Characteristic.ConfiguredName).setProps({
+    this.switchService.setCharacteristic(Characteristic.ConfiguredName, this.name)
+    this.switchService.getCharacteristic(Characteristic.ConfiguredName).setProps({
       perms: [Characteristic.Perms.READ]
     });
 
-    this.tvService.addCharacteristic(SonyProjectorCharacteristics.ScreenAspectRatio)
-    this.tvService
+    this.switchService.addCharacteristic(SonyProjectorCharacteristics.ScreenAspectRatio)
+    this.switchService
         .getCharacteristic(SonyProjectorCharacteristics.ScreenAspectRatio)
         .on('get', this.getAspectRatio.bind(this))
         .on('set', this.setAspectRatio.bind(this));
 
-    // this.tvService.addCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
-    // this.tvService
+    // this.switchService.addCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
+    // this.switchService
     //     .getCharacteristic(SonyProjectorCharacteristics.ScreenPicturePosition)
     //     .on('get', this.getPicturePosition.bind(this))
     //     .on('set', this.setPicturePosition.bind(this));
 
-    this.tvService.addCharacteristic(Characteristic.PictureMode);
-    this.tvService
+    this.switchService.addCharacteristic(Characteristic.PictureMode);
+    this.switchService
         .getCharacteristic(Characteristic.PictureMode)
         .on('get', this.getPictureMode.bind(this))
         .on('set', this.setPictureMode.bind(this));
@@ -59,7 +59,7 @@ function ProjectorAccessory(log, config) {
 }
 
 ProjectorAccessory.prototype.getServices = function() {
-    return [ this.informationService, this.tvService ];
+    return [ this.informationService, this.switchService ];
 };
 
 ProjectorAccessory.prototype.getAspectRatio = function (callback) {
